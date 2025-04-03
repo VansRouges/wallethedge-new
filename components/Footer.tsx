@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link'
@@ -8,7 +9,7 @@ export default function Footer(){
         <footer className="bg-blue-500 text-white">
             <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
                 <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
-                    <p className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+                    <div className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
                         <div className="text-3xl text-blue-500 font-bold">
                             <img
                                 className="h-8 w-60 ml-2 cursor-pointer"
@@ -16,7 +17,7 @@ export default function Footer(){
                                 alt="Your Company"
                             />
                         </div>
-                    </p>
+                    </div>
                 </div>
                 <div className="flex-grow flex flex-wrap md:pl-8 -mb-10 md:mt-0 mt-10 md:text-left text-center">
                     <motion.div
@@ -58,7 +59,7 @@ export default function Footer(){
                             {/* <li className="mb-2 cursor-pointer">
                                 Pricing Plan
                             </li> */}
-                            <Link href="/login" className="mb-2 cursor-pointer">
+                            <Link href="/sign-in" className="mb-2 cursor-pointer">
                                 Register
                             </Link>
                             {/* <li className="mb-2 cursor-pointer">

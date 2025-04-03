@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import {
     ChevronRight,
@@ -27,7 +28,8 @@ import {
     TooltipContent,
     Tooltip
 } from "@/components/ui/tooltip";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 interface ChartData {
     name: string;
@@ -47,12 +49,6 @@ interface WalletAddress {
     address: string;
     icon: React.ComponentType<{ className?: string }>;
 }
-
-// interface ProfileInfo {
-//     total_investment?: number;
-//     current_value?: number;
-//     roi?: number;
-// }
 
 function formatCurrency(amount: number): string {
     return new Intl.NumberFormat('en-US', {
@@ -115,17 +111,16 @@ const walletAddresses: WalletAddress[] = [
 ];
 
 export default function Dashboard() {
-    const { profileInfo, priceActions } = useSidebarContext();
+    const { user } = useUser()
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
-    // const [userName, setUserName] = useState<string>("");
     const router = useRouter();
 
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const storedUserName = localStorage.getItem("userName") || "";
-            setUserName(storedUserName);
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (typeof window !== "undefined") {
+    //         const storedUserName = localStorage.getItem("userName") || "";
+    //         // setUserName(storedUserName);
+    //     }
+    // }, []);
 
     const handleCopyClick = (address: string) => {
         navigator.clipboard.writeText(address);
@@ -143,8 +138,8 @@ export default function Dashboard() {
                         <DollarSign className="h-4 w-4 text-muted-foreground"/>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{formatCurrency(profileInfo?.total_investment ?? 0)}</div>
-                        <p className="text-xs text-muted-foreground">+{profileInfo?.roi ?? 0}%</p>
+                        <div className="text-2xl font-bold">{formatCurrency(user?.publicMetadata?.total_investment ?? 0)}</div>
+                        <p className="text-xs text-muted-foreground">+{user?.publicMetadata?.roi ?? 0}%</p>
                     </CardContent>
                 </Card>
                 <Card className="rounded-xl">
@@ -153,8 +148,8 @@ export default function Dashboard() {
                         <CreditCard className="h-4 w-4 text-muted-foreground"/>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{formatCurrency(profileInfo?.current_value ?? 0)}</div>
-                        <p className="text-xs text-muted-foreground">+{profileInfo?.roi ?? 0}%</p>
+                        <div className="text-2xl font-bold">{formatCurrency(user?.publicMetadata?.current_value ?? 0)}</div>
+                        <p className="text-xs text-muted-foreground">+{user?.publicMetadata?.roi ?? 0}%</p>
                     </CardContent>
                 </Card>
                 <Card className="rounded-xl">
@@ -163,7 +158,7 @@ export default function Dashboard() {
                         <DollarSign className="h-4 w-4 text-muted-foreground"/>
                     </CardHeader>
                     <CardContent className="flex space-x-3">
-                        <div className="text-2xl font-bold">+{profileInfo?.roi ?? 0}%</div>
+                        <div className="text-2xl font-bold">+{user?.publicMetadata?.roi ?? 0}%</div>
                     </CardContent>
                 </Card>
             </div>

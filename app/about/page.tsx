@@ -4,8 +4,6 @@ import Header from '@/components/about/Header'
 import CTA from '@/components/about/CTA'
 import Info from '@/components/about/Info'
 import Hero from '@/components/about/Hero'
-
-
 import Footer from '@/components/Footer'
 
 const about = () => {

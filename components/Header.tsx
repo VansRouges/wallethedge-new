@@ -1,6 +1,9 @@
+"use client"
+import { useUser } from "@clerk/nextjs"
 import Link from "next/link"
   
   export default function Example() {
+    const { user } = useUser()
     return (
       <div className="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
         <img
@@ -44,8 +47,8 @@ import Link from "next/link"
           </div>
           <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
             <div className="grid grid-cols-2 gap-y-6 text-base font-semibold leading-7 text-white sm:grid-cols-2 md:flex lg:gap-x-10">
-                <Link href='/login' className="bg-blue-600 p-2 w-40 text-center">
-                  Get Started 
+                <Link href='/dashboard' className="bg-blue-600 p-2 w-40 text-center">
+                  {user ? "Go to Dashboard" : "Get Started" }
                 </Link>
                 {/* <a href='#' className="p-1">
                   Learn More <span aria-hidden="true">&rarr;</span>

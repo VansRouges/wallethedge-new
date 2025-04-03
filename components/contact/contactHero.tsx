@@ -1,3 +1,4 @@
+"use client"
 import {GoDot } from 'react-icons/go'
 import { motion } from 'framer-motion';
 
