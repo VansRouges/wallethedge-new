@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { User, Mail, Lock, FileCheck } from 'lucide-react'
+import { FileCheck } from 'lucide-react'
 import { storage, ID, Role, Permission, databases } from "@/lib/appwrite";
 import { Button } from "../../../components/ui/button"
 import {
@@ -20,28 +20,28 @@ import "react-toastify/dist/ReactToastify.css";
 import { useUser } from '@clerk/nextjs';
 import { UserProfile } from '@clerk/clerk-react';
 
-const kycCollectionID = process.env.NEXT_PUBLIC_KYC_COLLECTION_ID;
-const databaseID = process.env.NEXT_PUBLIC_DATABASE_ID;
+const kycCollectionID = process.env.NEXT_PUBLIC_KYC_COLLECTION_ID || (() => { throw new Error("NEXT_PUBLIC_KYC_COLLECTION_ID is not defined"); })();
+const databaseID = process.env.NEXT_PUBLIC_DATABASE_ID || (() => { throw new Error("NEXT_PUBLIC_DATABASE_ID is not defined"); })();
 const kycBucketID = process.env.NEXT_PUBLIC_KYC_BUCKET_ID || ""
 const projectID = process.env.NEXT_PUBLIC_PROJECT_ID
 
 export default function Index() {
   const { user } =  useUser()
-  const [kycStatus, setKycStatus] = useState('pending'); // Assuming the status is initially 'pending'
+  // const [kycStatus, setKycStatus] = useState('pending'); // Assuming the status is initially 'pending'
   const [idType, setIdType] = useState('Passport');
   const [firstName, setfirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [frontFile, setFrontFile] = useState(null);
-  const [backFile, setBackFile] = useState(null);
+  const [frontFile, setFrontFile] = useState<File | null>(null);
+  const [backFile, setBackFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    fullName: 'John Doe',
-    dateOfBirth: '1990-01-01',
-    address: '123 Main St, City, Country',
-    phoneNumber: '+1234567890',
-  })
-  const [email, setEmail] = useState('john.doe@example.com')
+  // const [userInfo, setUserInfo] = useState({
+  //   fullName: 'John Doe',
+  //   dateOfBirth: '1990-01-01',
+  //   address: '123 Main St, City, Country',
+  //   phoneNumber: '+1234567890',
+  // })
+  // const [email, setEmail] = useState('john.doe@example.com')
   const router = useRouter()
 
   const handleKycSubmit = async (e: { preventDefault: () => void; }) => {
@@ -50,6 +50,10 @@ export default function Index() {
 
     try {
       // Upload ID Document
+      if (!frontFile || !backFile) {
+        throw new Error("Both front and back ID files must be uploaded.");
+      }
+
       const idFrontResponse = await storage.createFile(
           kycBucketID, // Replace with actual storage bucket ID
           ID.unique(),
@@ -77,20 +81,20 @@ export default function Index() {
       };
 
       // Profile object to be saved in Appwrite Database
-      const profileData = {
-        userId: user?.id,
-        full_name: user?.fullName,
-        avatar_url: user?.imageUrl, // Appwrite file URL
-        account_trader: null,
-        account_status: null,
-        btc_balance: null,
-        eth_balance: null,
-        usdt_balance: null,
-        total_investment: null,
-        current_value: null,
-        roi: null,
-        kyc_status: true
-      }
+      // const profileData = {
+      //   userId: user?.id,
+      //   full_name: user?.fullName,
+      //   avatar_url: user?.imageUrl, // Appwrite file URL
+      //   account_trader: null,
+      //   account_status: null,
+      //   btc_balance: null,
+      //   eth_balance: null,
+      //   usdt_balance: null,
+      //   total_investment: null,
+      //   current_value: null,
+      //   roi: null,
+      //   kyc_status: true
+      // }
 
       // Submit KYC data
       const response = await databases.createDocument(
@@ -199,12 +203,20 @@ export default function Index() {
                           <div className="space-y-2">
                             <Label htmlFor="idUpload">Upload Front of ID Document</Label>
                             <Input id="idUpload" className="rounded-xl" type="file"
-                                   onChange={(e) => setFrontFile(e.target.files[0])} required/>
+                                   onChange={(e) => {
+                                     if (e.target.files && e.target.files[0]) {
+                                       setFrontFile(e.target.files[0]);
+                                     }
+                                   }} required/>
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="selfie">Upload Back of ID Document</Label>
                             <Input id="selfie" className="rounded-xl" type="file"
-                                   onChange={(e) => setBackFile(e.target.files[0])} required/>
+                                   onChange={(e) => {
+                                     if (e.target.files && e.target.files[0]) {
+                                       setBackFile(e.target.files[0]);
+                                     }
+                                   }} required/>
                           </div>
                         </div>
                         <Button type="submit" className="mt-4 rounded-xl border-none bg-blue-600 hover:bg-blue-800" disabled={loading}>

@@ -3,16 +3,16 @@ import { useState } from 'react';
 import BaseLayout from '@/components/BaseLayout';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from 'next/navigation';
-import { Card, CardDescription, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+// import { useRouter } from 'next/navigation';
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Bitcoin, Coins, DollarSign, Wallet, ArrowUpRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { databases, ID, Role, Permission } from '@/lib/appwrite';
-import { useSidebarContext } from "@/context/SidebarContext";
-import { Models } from 'appwrite';
+// import { useSidebarContext } from "@/context/SidebarContext";
+// import { Models } from 'appwrite';
 import { useUser } from '@clerk/nextjs';
 
 interface CryptoOption {
@@ -34,9 +34,9 @@ interface WithdrawalData {
   usdt_amount: number | null;
 }
 
-interface WithdrawProps {
-  session?: Models.Session;
-}
+// interface WithdrawProps {
+//   session?: Models.Session;
+// }
 
 const cryptoOptions: CryptoOption[] = [
     { name: 'Bitcoin', symbol: 'BTC', icon: Bitcoin, balanceKey: 'btc_balance' },
@@ -48,18 +48,18 @@ const withdrawalCollectionID = process.env.NEXT_PUBLIC_WITHDRAWALS_COLLECTION_ID
 const databaseID = process.env.NEXT_PUBLIC_DATABASE_ID as string;
 
 // Helper function to format USDT balance as currency
-const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(value);
-};
+// const formatCurrency = (value: number): string => {
+//     return new Intl.NumberFormat('en-US', {
+//         style: 'currency',
+//         currency: 'USD',
+//         minimumFractionDigits: 0,
+//         maximumFractionDigits: 0
+//     }).format(value);
+// };
 
-export default function Withdraw({ session }: WithdrawProps) {
+export default function Withdraw() {
     const { user } = useUser()
-    const { loggedInUser, profileInfo } = useSidebarContext();
+    // const { loggedInUser, profileInfo } = useSidebarContext();
     const [loading, setLoading] = useState<boolean>(false);
     const [selectedCrypto, setSelectedCrypto] = useState<CryptoOption | null>(null);
     const [amount, setAmount] = useState<string>('');
@@ -113,20 +113,20 @@ export default function Withdraw({ session }: WithdrawProps) {
         }
     };
 
-    const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => {
-        return (
-            <svg viewBox="0 0 24 24" fill="none" {...props}>
-                <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2"/>
-                <path
-                    d="M7 13l3 3 7-7"
-                    stroke="#fff"
-                    strokeWidth={1.5}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                />
-            </svg>
-        );
-    };
+    // const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => {
+    //     return (
+    //         <svg viewBox="0 0 24 24" fill="none" {...props}>
+    //             <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2"/>
+    //             <path
+    //                 d="M7 13l3 3 7-7"
+    //                 stroke="#fff"
+    //                 strokeWidth={1.5}
+    //                 strokeLinecap="round"
+    //                 strokeLinejoin="round"
+    //             />
+    //         </svg>
+    //     );
+    // };
 
     return (
         <BaseLayout>
@@ -150,11 +150,11 @@ export default function Withdraw({ session }: WithdrawProps) {
                                         <CryptoIcon className="h-6 w-6" />
                                         <span>{crypto.name}</span>
                                     </CardTitle>
-                                    <CardDescription className="text-center font-semibold">
+                                    {/* <CardDescription className="text-center font-semibold">
                                         Balance: {crypto.symbol === 'USDT'
                                         ? formatCurrency(profileInfo?.[crypto.balanceKey as keyof typeof profileInfo] as number ?? 0)
                                         : profileInfo?.[crypto.balanceKey as keyof typeof profileInfo] ?? 0} {crypto.symbol}
-                                    </CardDescription>
+                                    </CardDescription> */}
                                 </CardHeader>
                                 <CardContent>
                                     <Dialog>

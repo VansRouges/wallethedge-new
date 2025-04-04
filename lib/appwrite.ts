@@ -6,7 +6,7 @@ export const databases = new Databases(client)
 
 export const storage = new Storage(client)
 
-const projectId = process.env.NEXT_PUBLIC_PROJECT_ID!!;
+const projectId = process.env.NEXT_PUBLIC_PROJECT_ID!;
 
 client
     .setEndpoint('https://cloud.appwrite.io/v1')

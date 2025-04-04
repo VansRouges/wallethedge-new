@@ -10,9 +10,9 @@ import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { useSidebarContext } from "@/context/SidebarContext";
+// import { useSidebarContext } from "@/context/SidebarContext";
 import { databases, ID, Permission, Role } from '@/lib/appwrite';
-import { Models } from 'appwrite';
+// import { Models } from 'appwrite';
 import { useUser } from '@clerk/nextjs';
 
 // Define collection ID for deposits
@@ -36,9 +36,9 @@ interface DepositData {
   deposit_usdt: number | null;
 }
 
-interface DepositProps {
-  session?: Models.Session; // Adjust this type based on your session object structure
-}
+// interface DepositProps {
+//   session?: Models.Session; // Adjust this type based on your session object structure
+// }
 
 const cryptoOptions: CryptoOption[] = [
   { name: 'Bitcoin', symbol: 'BTC', icon: Bitcoin, address: 'bc1qhsqeuyt9228kkcuqf02czt36ne6t4tmnfl29yz', imageUrl: '/images/QR Code/btc.jpg' },
@@ -46,9 +46,9 @@ const cryptoOptions: CryptoOption[] = [
   { name: 'Tether', symbol: 'USDT', icon: DollarSign, address: '0x6a50F355b90397f1B0f568C0deAEc7db371f089e', imageUrl: '/images/QR Code/usdt.jpg' },
 ];
 
-export default function Deposit({ session }: DepositProps) {
+export default function Deposit() {
   const { user } = useUser()
-  const { loggedInUser, profileInfo } = useSidebarContext();
+  // const { loggedInUser, profileInfo } = useSidebarContext();
   const [selectedCrypto, setSelectedCrypto] = useState<CryptoOption | null>(null);
   const [amount, setAmount] = useState<string>('');
   const [copiedAddress, setCopiedAddress] = useState<string>('');
@@ -98,20 +98,20 @@ export default function Deposit({ session }: DepositProps) {
     }
   };
 
-  const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" {...props}>
-        <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2"/>
-        <path
-          d="M7 13l3 3 7-7"
-          stroke="#fff"
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-  };
+  // const CheckIcon = (props: React.SVGProps<SVGSVGElement>) => {
+  //   return (
+  //     <svg viewBox="0 0 24 24" fill="none" {...props}>
+  //       <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2"/>
+  //       <path
+  //         d="M7 13l3 3 7-7"
+  //         stroke="#fff"
+  //         strokeWidth={1.5}
+  //         strokeLinecap="round"
+  //         strokeLinejoin="round"
+  //       />
+  //     </svg>
+  //   );
+  // };
 
   return (
     <BaseLayout>

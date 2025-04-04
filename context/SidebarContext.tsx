@@ -2,27 +2,25 @@
 "use client"
 import { createContext, useState, useContext, ReactNode } from "react";
 
-interface ProfileInfo {
-  total_investment?: number;
-  current_value?: number;
-  roi?: number;
-  // Add other profile properties as needed
-}
+// interface ProfileInfo {
+//   total_investment?: number;
+//   current_value?: number;
+//   roi?: number;
+//   // Add other profile properties as needed
+// }
 
-interface PriceActions {
-  // Define the structure of priceActions if needed
-  [key: string]: any;
+interface CryptoData {
+  $id?: string;
+  token_name: string;
+  value: number;
+  price_direction: boolean | null;
+  price_change: string;
 }
-
 interface SidebarContextType {
   isCollapsed: boolean;
   toggleSidebarCollapse: () => void;
-  loggedInUser: any | null; // Replace 'any' with your user type
-  profileInfo: ProfileInfo | null;
-  priceActions: PriceActions | null;
-  setProfileInfo: React.Dispatch<React.SetStateAction<ProfileInfo | null>>;
-  setLoggedInUser: React.Dispatch<React.SetStateAction<any | null>>; // Replace 'any' with your user type
-  setPriceActions: React.Dispatch<React.SetStateAction<PriceActions | null>>;
+  priceActions: CryptoData[] | null;
+  setPriceActions: React.Dispatch<React.SetStateAction<CryptoData[] | null>>;
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
@@ -33,9 +31,9 @@ interface SidebarProviderProps {
 
 const SidebarProvider = ({ children }: SidebarProviderProps) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [profileInfo, setProfileInfo] = useState<ProfileInfo | null>(null);
-  const [loggedInUser, setLoggedInUser] = useState<any | null>(null); // Replace 'any' with your user type
-  const [priceActions, setPriceActions] = useState<PriceActions | null>(null);
+  // const [profileInfo, setProfileInfo] = useState<ProfileInfo | null>(null);
+  // const [loggedInUser, setLoggedInUser] = useState<any | null>(null); // Replace 'any' with your user type
+  const [priceActions, setPriceActions] = useState<CryptoData[] | null>(null);
 
   const toggleSidebarCollapse = () => {
     setIsCollapsed((prevState) => !prevState);
@@ -46,11 +44,7 @@ const SidebarProvider = ({ children }: SidebarProviderProps) => {
       value={{
         isCollapsed,
         toggleSidebarCollapse,
-        loggedInUser,
-        profileInfo,
         priceActions,
-        setProfileInfo,
-        setLoggedInUser,
         setPriceActions,
       }}
     >

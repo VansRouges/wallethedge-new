@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
     ChevronRight,
     Check,
@@ -20,7 +20,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { Button } from "@/components/ui/button";
-import { useSidebarContext } from '@/context/SidebarContext';
+// import { useSidebarContext } from '@/context/SidebarContext';
 import BaseLayout from '@/components/BaseLayout';
 import {
     TooltipProvider,
@@ -111,16 +111,9 @@ const walletAddresses: WalletAddress[] = [
 ];
 
 export default function Dashboard() {
-    const { user } = useUser()
+    const { user } = useUser() as { user: { publicMetadata: { total_investment?: number; current_value?: number; roi?: number } } }
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
     const router = useRouter();
-
-    // useEffect(() => {
-    //     if (typeof window !== "undefined") {
-    //         const storedUserName = localStorage.getItem("userName") || "";
-    //         // setUserName(storedUserName);
-    //     }
-    // }, []);
 
     const handleCopyClick = (address: string) => {
         navigator.clipboard.writeText(address);
@@ -138,7 +131,7 @@ export default function Dashboard() {
                         <DollarSign className="h-4 w-4 text-muted-foreground"/>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{formatCurrency(user?.publicMetadata?.total_investment ?? 0)}</div>
+                        <div className="text-2xl font-bold">{formatCurrency(user?.publicMetadata.total_investment ?? 0)}</div>
                         <p className="text-xs text-muted-foreground">+{user?.publicMetadata?.roi ?? 0}%</p>
                     </CardContent>
                 </Card>

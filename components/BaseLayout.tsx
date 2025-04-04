@@ -1,16 +1,13 @@
 "use client"
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
     History,
-    ChevronDown,
+    // ChevronDown,
     CreditCard,
     DollarSign,
     Home,
     Settings,
-    User,
-    ArrowUpIcon,
-    ArrowDownIcon
 } from 'lucide-react';
 import {
     Sidebar,
@@ -25,13 +22,13 @@ import {
 } from "../components/ui/sidebar";
 import { useSidebarContext } from "@/context/SidebarContext";
 import { databases, Query } from "@/lib/appwrite";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Card, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import CryptoPriceBanner from "./crypto-price-banner";
 import { useUser } from '@clerk/nextjs';
 import { SignedIn, UserButton } from '@clerk/nextjs';
-import { Models } from 'appwrite';
+// import { Models } from 'appwrite';
 
 interface MenuItem {
     icon: React.ComponentType<{ className?: string }>;
@@ -43,10 +40,13 @@ interface BaseLayoutProps {
     children: React.ReactNode;
 }
 
-interface PriceAction {
-    // Define the structure of your price actions here
-    [key: string]: any;
-}
+// interface CryptoData {
+//     $id?: string;
+//     token_name: string;
+//     value: number;
+//     price_direction: boolean | null;
+//     price_change: string;
+//   }
 
 const menuItems: MenuItem[] = [
     { icon: Home, label: 'Dashboard', href: '/dashboard' },
@@ -62,7 +62,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
         priceActions,
         setPriceActions
     } = useSidebarContext();
-    const router = useRouter();
+    // const router = useRouter();
     const pathname = usePathname();
 
     // Function to fetch price actions
@@ -77,7 +77,13 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
             );
 
             console.log("Price Actions log", response);
-            setPriceActions(response.documents as PriceAction[] || []);
+            setPriceActions(response.documents.map(doc => ({
+                $id: doc.$id,
+                token_name: doc.token_name,
+                value: doc.value,
+                price_direction: doc.price_direction,
+                price_change: doc.price_change,
+            })) || []);
         } catch (error) {
             console.error("Error fetching price actions information:", error instanceof Error ? error.message : 'Unknown error');
         }
@@ -142,7 +148,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                 <div className="lg:w-[70%] lg:ml-[20%] flex flex-1 flex-col gap-4 px-2 sm:p-4">
                     <div className="my-3">
                         <div className="mb-2">
-                            <CryptoPriceBanner data={priceActions} />
+                            <CryptoPriceBanner data={priceActions || undefined} />
                         </div>
                         <Card className="rounded-xl border-none bg-gradient-to-r from-blue-500 to-blue-600">
                             <CardHeader>
