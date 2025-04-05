@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react';
-// import { Button } from "../../components/ui/button";
 import {
     Card,
     CardContent,
@@ -28,6 +27,7 @@ import BaseLayout from "@/components/BaseLayout";
 import { databases, Query } from "@/lib/appwrite";
 import { Models } from 'appwrite';
 import { Input } from '@/components/ui/input';
+import { useUser } from '@clerk/nextjs';
 
 interface Transaction {
     id: string;
@@ -54,6 +54,7 @@ interface WithdrawalDocument extends Models.Document {
 }
 
 export default function TransactionsPage() {
+    const { user } = useUser();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [filterType, setFilterType] = useState<'all' | 'credit' | 'debit'>('all');
     const [deposits, setDeposits] = useState<DepositDocument[]>([]);
@@ -62,7 +63,7 @@ export default function TransactionsPage() {
     // Function to fetch deposits by userId
     const fetchDeposits = useCallback(async () => {
         try {
-            const userId = localStorage.getItem("userId");
+            const userId = user?.id || "";
             if (!userId) return;
 
             const response = await databases.listDocuments(
@@ -82,7 +83,7 @@ export default function TransactionsPage() {
     // Function to fetch withdrawal by userId
     const fetchWithdrawals = useCallback(async () => {
         try {
-            const userId = localStorage.getItem("userId");
+            const userId = user?.id || "";
             if (!userId) return;
 
             const response = await databases.listDocuments(
