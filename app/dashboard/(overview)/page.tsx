@@ -114,6 +114,7 @@ export default function Dashboard() {
     const { user } = useUser() as { user: { publicMetadata: { total_investment?: number; current_value?: number; roi?: number } } }
     const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
     const router = useRouter();
+    console.log("User", user)
 
     const handleCopyClick = (address: string) => {
         navigator.clipboard.writeText(address);

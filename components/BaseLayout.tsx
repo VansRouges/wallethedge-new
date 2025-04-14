@@ -153,7 +153,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                         <Card className="rounded-xl border-none bg-gradient-to-r from-blue-500 to-blue-600">
                             <CardHeader>
                                 <CardTitle className="text-lg md:text-2xl font-bold text-white">
-                                    Welcome back, {user?.firstName ?? ""}!
+                                    Welcome back, {user?.username ?? ""}!
                                 </CardTitle>
                                 <CardDescription className="text-blue-100 flex space-x-3">
                                     <span className="font-bold">
