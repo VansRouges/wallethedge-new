@@ -1,118 +1,250 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import { useAuth, useSignIn } from '@clerk/nextjs'
-import type { NextPage } from 'next'
-import { useRouter } from 'next/navigation'
+"use client"
 
-const ForgotPasswordPage: NextPage = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [code, setCode] = useState('')
-  const [successfulCreation, setSuccessfulCreation] = useState(false)
-  const [secondFactor, setSecondFactor] = useState(false)
-  const [error, setError] = useState('')
+import { useState, useEffect, type FormEvent } from "react"
+import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { useSignIn, useAuth } from "@clerk/nextjs"
+import { useRouter } from "next/navigation"
 
-  const router = useRouter()
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+export default function ForgotPassword() {
+  const [step, setStep] = useState<"email" | "reset">("email")
+  const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+
+  const [email, setEmail] = useState("")
+  const [code, setCode] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+
+  const [emailError, setEmailError] = useState("")
+  const [codeError, setCodeError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+  const [confirmPasswordError, setConfirmPasswordError] = useState("")
+
+  const { signIn, setActive } = useSignIn()
   const { isSignedIn } = useAuth()
-  const { isLoaded, signIn, setActive } = useSignIn()
+  const router = useRouter()
 
   useEffect(() => {
-    if (isSignedIn) {
-      router.push('/')
-    }
+    if (isSignedIn) router.push("/")
   }, [isSignedIn, router])
 
-  if (!isLoaded) {
-    return null
+  const validateEmail = () => {
+    if (!email) {
+      setEmailError("Email is required")
+      return false
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setEmailError("Please enter a valid email address")
+      return false
+    }
+    setEmailError("")
+    return true
   }
 
-  // Send the password reset code to the user's email
-  async function create(e: React.FormEvent) {
+  const validateResetForm = () => {
+    let isValid = true
+    if (!code || code.length < 6) {
+      setCodeError("Reset code must be at least 6 characters")
+      isValid = false
+    } else {
+      setCodeError("")
+    }
+    if (!password || password.length < 8) {
+      setPasswordError("Password must be at least 8 characters")
+      isValid = false
+    } else {
+      setPasswordError("")
+    }
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match")
+      isValid = false
+    } else {
+      setConfirmPasswordError("")
+    }
+    return isValid
+  }
+
+  const handleEmailSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    await signIn
-      ?.create({
-        strategy: 'reset_password_email_code',
+    if (!validateEmail() || !signIn) return
+
+    setIsLoading(true)
+    try {
+      await signIn.create({
+        strategy: "reset_password_email_code",
         identifier: email,
       })
-      .then((_) => {
-        setSuccessfulCreation(true)
-        setError('')
-      })
-      .catch((err) => {
-        console.error('error', err.errors[0].longMessage)
-        setError(err.errors[0].longMessage)
-      })
+      setStep("reset")
+      setCode("")
+      setPassword("")
+      setConfirmPassword("")
+      setCodeError("")
+      setPasswordError("")
+      setConfirmPasswordError("")
+    } catch (error) {
+      setEmailError(error?.errors?.[0]?.longMessage || "Failed to send reset code.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  // Reset the user's password.
-  // Upon successful reset, the user will be
-  // signed in and redirected to the home page
-  async function reset(e: React.FormEvent) {
+  const handleResetSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    await signIn
-      ?.attemptFirstFactor({
-        strategy: 'reset_password_email_code',
+    if (!validateResetForm() || !signIn) return
+
+    setIsLoading(true)
+    try {
+      const result = await signIn.attemptFirstFactor({
+        strategy: "reset_password_email_code",
         code,
         password,
       })
-      .then((result) => {
-        // Check if 2FA is required
-        if (result.status === 'needs_second_factor') {
-          setSecondFactor(true)
-          setError('')
-        } else if (result.status === 'complete') {
-          // Set the active session to
-          // the newly created session (user is now signed in)
-          setActive({ session: result.createdSessionId })
-          setError('')
-        } else {
-          console.log(result)
-        }
-      })
-      .catch((err) => {
-        console.error('error', err.errors[0].longMessage)
-        setError(err.errors[0].longMessage)
-      })
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId })
+        router.push("/")
+      } else {
+        setCodeError("Unexpected error occurred.")
+      }
+    } catch (error) {
+      setCodeError(error?.errors?.[0]?.longMessage || "Failed to reset password.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <div>
-      <h1>Forgot Password?</h1>
-      <form onSubmit={!successfulCreation ? create : reset}>
-        {!successfulCreation && (
-          <>
-            <label htmlFor="email">Provide your email address</label>
-            <input
-              type="email"
-              placeholder="e.g john@doe.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <button>Send password reset code</button>
-            {error && <p>{error}</p>}
-          </>
-        )}
-
-        {successfulCreation && (
-          <>
-            <label htmlFor="password">Enter your new password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-
-            <label htmlFor="password">
-              Enter the password reset code that was sent to your email
-            </label>
-            <input type="code" value={code} onChange={(e) => setCode(e.target.value)} />
-
-            <button>Reset</button>
-            {error && <p>{error}</p>}
-          </>
-        )}
-
-        {secondFactor && <p>2FA is required, but this UI does not handle that</p>}
-      </form>
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold text-center">Reset Password</CardTitle>
+          <CardDescription className="text-center">
+            {step === "email"
+              ? "Reset your password to regain access"
+              : `Enter the code sent to ${email} and your new password`}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {step === "email" ? (
+            <form onSubmit={handleEmailSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={emailError ? "border-red-500" : ""}
+                />
+                {emailError && <p className="text-sm font-medium text-red-500">{emailError}</p>}
+                <p className="text-sm text-gray-500">We&#39;ll send a password reset code to this email.</p>
+              </div>
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Sending code...
+                  </>
+                ) : (
+                  "Send Reset Code"
+                )}
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleResetSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="code">Reset Code</Label>
+                <Input
+                  id="code"
+                  placeholder="Enter the code from your email"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  className={codeError ? "border-red-500" : ""}
+                />
+                {codeError && <p className="text-sm font-medium text-red-500">{codeError}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">New Password</Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your new password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className={passwordError ? "border-red-500" : ""}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-0 top-0 h-full px-3"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
+                  </Button>
+                </div>
+                {passwordError && <p className="text-sm font-medium text-red-500">{passwordError}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input
+                  id="confirmPassword"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Confirm your new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className={confirmPasswordError ? "border-red-500" : ""}
+                />
+                {confirmPasswordError && <p className="text-sm font-medium text-red-500">{confirmPasswordError}</p>}
+              </div>
+              <div className="flex flex-col space-y-2">
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Resetting password...
+                    </>
+                  ) : (
+                    "Reset Password"
+                  )}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setStep("email")}
+                  disabled={isLoading}
+                >
+                  Back to Email Step
+                </Button>
+              </div>
+            </form>
+          )}
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <p className="text-sm text-gray-500">
+            Remember your password?{" "}
+            <a href="/login" className="text-primary hover:underline">
+              Sign in
+            </a>
+          </p>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
-
-export default ForgotPasswordPage

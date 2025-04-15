@@ -102,6 +102,7 @@ export default function TransactionsPage() {
 
     // Fetch deposits and withdrawals on component mount
     useEffect(() => {
+        console.log("rendering for transactions...")
         fetchDeposits();
         fetchWithdrawals();
     }, [fetchDeposits, fetchWithdrawals]);

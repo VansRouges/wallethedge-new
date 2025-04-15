@@ -90,6 +90,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
     }, [setPriceActions]);
 
     useEffect(() => {
+        console.log("rendering for BaseLayout...")
         fetchPriceActions();
     }, [fetchPriceActions]);
 

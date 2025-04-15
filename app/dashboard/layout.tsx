@@ -29,6 +29,7 @@ export default function RootLayout({
   
    // Initialize metadata if it doesn't exist
    useEffect(() => {
+    console.log("rendering for app/dashboard/layout...")
     const initializeMetadata = async () => {
       if (user) {
         const metadata = user.publicMetadata;

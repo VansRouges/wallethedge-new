@@ -18,10 +18,12 @@ export default function CryptoPriceBanner({ data = [] }: CryptoPriceBannerProps)
     const [currentIndex, setCurrentIndex] = useState<number>(0);
 
     useEffect(() => {
+        console.log("rendering for crypto-price-banner 1...")
         setPrices(data);
     }, [data]);
 
     useEffect(() => {
+        console.log("rendering for crypto-price-banner 2...")
         if (!prices || prices.length === 0) return;
 
         const timer = setInterval(() => {
