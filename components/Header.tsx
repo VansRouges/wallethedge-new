@@ -47,7 +47,7 @@ import Link from "next/link"
           </div>
           <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
             <div className="grid grid-cols-2 gap-y-6 text-base font-semibold leading-7 text-white sm:grid-cols-2 md:flex lg:gap-x-10">
-                <Link href='/sign-in' className="bg-blue-600 p-2 w-40 text-center">
+                <Link href={user ? "/dashboard" : "/sign-in"} className="bg-blue-600 p-2 w-40 text-center">
                   {user ? "Go to Dashboard" : "Get Started" }
                 </Link>
                 {/* <a href='#' className="p-1">
