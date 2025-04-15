@@ -95,7 +95,8 @@ export default function ForgotPassword() {
       setPasswordError("")
       setConfirmPasswordError("")
     } catch (error) {
-      setEmailError(error?.errors?.[0]?.longMessage || "Failed to send reset code.")
+      console.log("Error in handleEmailSubmit", error)
+      setEmailError("Failed to send reset code.")
     } finally {
       setIsLoading(false)
     }
@@ -119,7 +120,8 @@ export default function ForgotPassword() {
         setCodeError("Unexpected error occurred.")
       }
     } catch (error) {
-      setCodeError(error?.errors?.[0]?.longMessage || "Failed to reset password.")
+      console.log("Error in handleResetSubmit", error)
+      setCodeError("Failed to reset password.")
     } finally {
       setIsLoading(false)
     }
