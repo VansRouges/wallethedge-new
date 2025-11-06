@@ -8,7 +8,7 @@ interface UpdateMetadataParams {
     current_value: number
     account_status: boolean
     account_trader: string
-    kyc_status:boolean
+    kyc_status: string  // Changed from boolean to string
     total_investment: number
   };
 }

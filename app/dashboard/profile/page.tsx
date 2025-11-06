@@ -153,81 +153,93 @@ export default function Index() {
                   <CardDescription>Complete your KYC to unlock all features</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {user?.publicMetadata?.kyc_status === false && (
-                      <form onSubmit={handleKycSubmit}>
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="idType">ID Type</Label>
-                            <select
-                                id="idType"
-                                className="w-full p-2 border rounded"
-                                value={idType}
-                                onChange={(e) => setIdType(e.target.value)}
-                            >
-                              <option>Passport</option>
-                              <option>Driver&#39;s License</option>
-                              <option>National ID</option>
-                            </select>
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="firstName">First Name</Label>
-                            <Input
-                                id="firstName"
-                                className="rounded-xl"
-                                value={firstName}
-                                onChange={(e) => setfirstName(e.target.value)}
-                                required
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="lastName">Last Name</Label>
-                            <Input
-                                id="lastName"
-                                className="rounded-xl"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                required
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="phoneNumber">Phone Number</Label>
-                            <Input
-                                id="phoneNumber"
-                                className="rounded-xl"
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                                required
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor="idUpload">Upload Front of ID Document</Label>
-                            <Input id="idUpload" className="rounded-xl" type="file"
-                                   onChange={(e) => {
-                                     if (e.target.files && e.target.files[0]) {
-                                       setFrontFile(e.target.files[0]);
-                                     }
-                                   }} required/>
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="selfie">Upload Back of ID Document</Label>
-                            <Input id="selfie" className="rounded-xl" type="file"
-                                   onChange={(e) => {
-                                     if (e.target.files && e.target.files[0]) {
-                                       setBackFile(e.target.files[0]);
-                                     }
-                                   }} required/>
-                          </div>
+                {(!user?.publicMetadata?.kyc_status || user?.publicMetadata?.kyc_status === "pending") && (
+                    <form onSubmit={handleKycSubmit}>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="idType">ID Type</Label>
+                          <select
+                              id="idType"
+                              className="w-full p-2 border rounded"
+                              value={idType}
+                              onChange={(e) => setIdType(e.target.value)}
+                          >
+                            <option>Passport</option>
+                            <option>Driver&#39;s License</option>
+                            <option>National ID</option>
+                          </select>
                         </div>
-                        <Button type="submit" className="mt-4 rounded-xl border-none bg-blue-600 hover:bg-blue-800" disabled={loading}>
-                          {loading ? 'Submitting...' : 'Submit KYC'}
-                        </Button>
-                      </form>
+                        <div className="space-y-2">
+                          <Label htmlFor="firstName">First Name</Label>
+                          <Input
+                              id="firstName"
+                              className="rounded-xl"
+                              value={firstName}
+                              onChange={(e) => setfirstName(e.target.value)}
+                              required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="lastName">Last Name</Label>
+                          <Input
+                              id="lastName"
+                              className="rounded-xl"
+                              value={lastName}
+                              onChange={(e) => setLastName(e.target.value)}
+                              required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="phoneNumber">Phone Number</Label>
+                          <Input
+                              id="phoneNumber"
+                              className="rounded-xl"
+                              value={phoneNumber}
+                              onChange={(e) => setPhoneNumber(e.target.value)}
+                              required
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="idUpload">Upload Front of ID Document</Label>
+                          <Input id="idUpload" className="rounded-xl" type="file"
+                                  onChange={(e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                      setFrontFile(e.target.files[0]);
+                                    }
+                                  }} required/>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="selfie">Upload Back of ID Document</Label>
+                          <Input id="selfie" className="rounded-xl" type="file"
+                                  onChange={(e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                      setBackFile(e.target.files[0]);
+                                    }
+                                  }} required/>
+                        </div>
+                      </div>
+                      <Button type="submit" className="mt-4 rounded-xl border-none bg-blue-600 hover:bg-blue-800" disabled={loading}>
+                        {loading ? 'Submitting...' : 'Submit KYC'}
+                      </Button>
+                    </form>
                   )}
-                  {user?.publicMetadata?.kyc_status === true && (
+                  {user?.publicMetadata?.kyc_status === "under_review" && (
                       <div className="text-center">
                         <FileCheck className="w-16 h-16 mx-auto text-green-500"/>
                         <p className="mt-4">Your KYC has been submitted and is under review.</p>
+                      </div>
+                  )}
+                   {user?.publicMetadata?.kyc_status === "approved" && (
+                      <div className="text-center">
+                        <FileCheck className="w-16 h-16 mx-auto text-green-500"/>
+                        <p className="mt-4">Your KYC has been approved!</p>
+                      </div>
+                  )}
+                  {user?.publicMetadata?.kyc_status === "rejected" && (
+                      <div className="text-center">
+                        <FileCheck className="w-16 h-16 mx-auto text-red-500"/>
+                        <p className="mt-4">Your KYC has been rejected. Please try again.</p>
                       </div>
                   )}
                 </CardContent>

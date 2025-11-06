@@ -45,7 +45,7 @@ export default function RootLayout({
                 current_value: 0,
                 account_status: false,
                 account_trader: "",
-                kyc_status: false,
+                kyc_status: "pending",  // Changed from false to "pending"
                 total_investment: 0,
               },
             });
