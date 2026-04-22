@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link'
+import Image from 'next/image';
 
 
 export default function Footer(){
@@ -11,10 +12,13 @@ export default function Footer(){
                 <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
                     <div className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
                         <div className="text-3xl text-blue-500 font-bold">
-                            <img
+                            <Image
                                 className="h-8 w-60 ml-2 cursor-pointer"
                                 src="/images/logo-2.webp"
-                                alt="Your Company"
+                                alt="WalletHedge"
+                                width={240}
+                                height={32}
+                                unoptimized
                             />
                         </div>
                     </div>

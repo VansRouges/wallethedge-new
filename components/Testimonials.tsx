@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
 import { RxDotFilled } from 'react-icons/rx';
 import { FaStar, FaQuoteRight } from "react-icons/fa";
+import Image from 'next/image';
 
 
 const Testimonials = () => {
@@ -90,10 +91,13 @@ const Testimonials = () => {
                         <span><FaQuoteRight className="text-gray-400 text-6xl relative bottom-4" /></span>
                     </div>
                     <div className='flex gap-3 -mt-4 pb-3'>
-                        <img
+                        <Image
                             className='border-2 rounded-full w-16 h-16'
                             src={slides[currentIndex].url}
-                            alt=''
+                            alt={slides[currentIndex].name}
+                            width={64}
+                            height={64}
+                            unoptimized
                         />
                         <div className='flex-row'>
                             <h2 className='text-blue-500 font-bold'>{slides[currentIndex].name}</h2>

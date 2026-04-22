@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WalletHedge
 
-## Getting Started
+WalletHedge is a Next.js App Router project for:
+- a marketing/landing experience
+- Clerk authentication (sign-in/sign-up)
+- a protected investor dashboard (overview, deposit, withdrawal, transactions, profile/KYC)
 
-First, run the development server:
+This branch includes the 2026 UI refresh and dashboard shell rebuild with WalletHedge blue/white brand styling.
+
+## Tech Stack
+
+- Next.js `16.x`
+- React `19.x`
+- TypeScript
+- Tailwind CSS + shadcn/ui primitives
+- Clerk auth
+- Appwrite (database + storage)
+
+## Local Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create and populate `.env` (required keys):
+
+```bash
+NEXT_PUBLIC_PROJECT_ID=
+NEXT_PUBLIC_DATABASE_ID=
+NEXT_PUBLIC_PROFILE_COLLECTION_ID=
+NEXT_PUBLIC_KYC_COLLECTION_ID=
+NEXT_PUBLIC_DEPOSITS_COLLECTION_ID=
+NEXT_PUBLIC_WITHDRAWALS_COLLECTION_ID=
+NEXT_PUBLIC_CRYPTO_BANNER_COLLECTION_ID=
+NEXT_PUBLIC_PROFILE_BUCKET_ID=
+NEXT_PUBLIC_KYC_BUCKET_ID=
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+```
+
+3. Run dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - start local development server
+- `npm run lint` - run eslint checks
+- `npx tsc --noEmit` - run type checking
+- `npm run build` - production build (run only when needed)
+- `npm run start` - run production server
 
-## Learn More
+## Route Map
 
-To learn more about Next.js, take a look at the following resources:
+- `/` - modernized landing page
+- `/about`, `/contact` - informational pages
+- `/sign-in`, `/sign-up` - Clerk auth pages
+- `/dashboard` - overview
+- `/dashboard/deposit`
+- `/dashboard/withdrawal`
+- `/dashboard/transactions`
+- `/dashboard/profile`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Dashboard route protection is handled in `proxy.ts`.
+- Appwrite access helpers live in `lib/services/dashboard.ts`.
+- Global brand tokens are defined in `app/globals.css`.
