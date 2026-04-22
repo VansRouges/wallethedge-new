@@ -4,6 +4,7 @@ import React from 'react';
 import { blogData } from './blogData';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Blog = () => {
     return (
@@ -21,7 +22,14 @@ const Blog = () => {
                 whileInView={{ opacity: 1, x:0 }}
                 className="p-4 md:w-1/3 rounded-lg" key={item.id}>
                 <div className="h-full border-2 border-gray-200 border-opacity-60 overflow-hidden bg-blue-200 rounded-xl">
-                  <img className="lg:h-48 md:h-36 w-full object-cover object-center" src={item.linkImg} alt={item.name} />
+                  <Image
+                    className="lg:h-48 md:h-36 w-full object-cover object-center"
+                    src={item.linkImg}
+                    alt={item.name}
+                    width={640}
+                    height={360}
+                    unoptimized
+                  />
                   <div className="p-4">
                     <h1 className="text-xl font-bold">{item.name}</h1>
                     {/* <p className="mb-3 text-xs">{item.date}</p> */}

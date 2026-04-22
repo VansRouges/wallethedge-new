@@ -2,6 +2,7 @@
 //     { name: 'Get Started', href: '#' },
 //     { name: 'Learn More', href: '#' },
 //   ]
+import Image from "next/image";
 // const stats = [
 //     { name: 'Offices worldwide', value: '12' },
 //     { name: 'Full-time colleagues', value: '300+' },
@@ -12,10 +13,12 @@
   export default function Example() {
     return (
       <div className="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32 cursor-pointer hover:brightness-75 ">
-        <img
+        <Image
           src="/images/map.jpg"
-          alt=""
+          alt="World map background"
           className="absolute inset-0 -z-10 h-full w-full object-cover object-right md:object-center"
+          fill
+          unoptimized
         />
         <div
           className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"

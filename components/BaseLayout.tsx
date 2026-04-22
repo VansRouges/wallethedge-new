@@ -27,7 +27,7 @@ import Image from "next/image";
 import { Card, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import CryptoPriceBanner from "./crypto-price-banner";
 import { useUser } from '@clerk/nextjs';
-import { SignedIn, UserButton } from '@clerk/nextjs';
+import { UserButton } from '@clerk/nextjs';
 // import { Models } from 'appwrite';
 
 interface MenuItem {
@@ -98,9 +98,10 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
             <Sidebar className="w-64 bg-white shadow-lg">
                 <SidebarHeader className="p-6 flex flex-row items-center justify-between">
                     <Image
-                        width={80}
-                        height={80}
-                        className="w-9 h-9 object-contain rounded-2xl"
+                        width={36}
+                        height={36}
+                        className="object-contain rounded-2xl"
+                        style={{ height: "auto" }}
                         src="/images/logo-icon.png"
                         alt="logo"
                         unoptimized={true}
@@ -139,9 +140,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
                         <h2 className="text-xl font-bold uppercase text-blue-800">Wallethedge</h2>
                     </div>
                     <div className="flex items-center gap-4">
-                        <SignedIn>
-                            <UserButton afterSignOutUrl="/sign-in" />
-                        </SignedIn>
+                        <UserButton />
                     </div>
                 </header>
 

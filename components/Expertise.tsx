@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 // import { Disclosure } from '@headlessui/react'
 // import { ChevronUpIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Blog = () => {
   return (
@@ -36,10 +37,13 @@ const Blog = () => {
                 whileInView={{ opacity: 1, y:30 }}
                 className="p-4 md:w-96">
                 <div className="h-[31rem] border-2 border-gray-200 border-opacity-60 overflow-hidden bg-blue-800">
-                    <img 
+                    <Image 
                         className="lg:h-60 md:h-36 w-full object-cover object-center"
                         src="/images/expertise2.jpg"
-                        alt="blog image"
+                        alt="Trusted by investor"
+                        width={640}
+                        height={360}
+                        unoptimized
                     />
                     <div className="p-4">
                         <h1 className="text-2xl p-2 font-bold text-white">Trusted by Investor</h1>
@@ -69,10 +73,13 @@ const Blog = () => {
                 whileInView={{ opacity: 1, y:-10 }}
                 className="p-4 md:w-96">
                 <div className="h-full border-2 border-gray-200 border-opacity-60 overflow-hidden bg-blue-500">
-                    <img 
+                    <Image 
                         className="lg:h-60 md:h-36 w-full object-cover object-center"
                         src="/images/expertise3.jpg"
-                        alt="blog image"
+                        alt="Invest with confidence"
+                        width={640}
+                        height={360}
+                        unoptimized
                     />
                     <div className="p-4">
                         <h1 className="text-2xl p-2 font-bold text-white">Invest With Confidence</h1>
@@ -102,10 +109,13 @@ const Blog = () => {
                 whileInView={{ opacity: 1, y:-50 }}
                 className="p-4 md:w-96">
                 <div className="h-full border-2 border-gray-200 border-opacity-60 overflow-hidden bg-blue-500">
-                    <img 
+                    <Image 
                         className="lg:h-60 md:h-36 w-full object-cover object-center"
                         src="/images/expertise1.jpg"
-                        alt="blog image"
+                        alt="Secure platform"
+                        width={640}
+                        height={360}
+                        unoptimized
                     />
                     <div className="p-4">
                         <h1 className="text-2xl p-2 font-bold text-white">Secure Platform</h1>

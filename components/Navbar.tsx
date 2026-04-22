@@ -3,6 +3,7 @@
 import { Disclosure } from '@headlessui/react'
 import {  XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const navigation = [
   { name: 'About', href: '/about', current: false },
@@ -30,18 +31,24 @@ export default function Navbar() {
               {/* Nav Logo*/}
                 <div className="flex flex-shrink-0 items-center bg-blue-600 w-64">
                   <Link href="/">
-                    <img
+                    <Image
                         className="lg:hidden sm:block h-8 w-64 cursor-pointer bg-white"
                         src="/images/logo-1.webp"
                         alt="WalletHedge"
+                        width={256}
+                        height={32}
+                        unoptimized
                       />
                   </Link>
 
                   <Link href="/">
-                    <img
+                    <Image
                       className="hidden h-8 w-60 lg:block ml-2 cursor-pointer"
                       src="/images/logo-2.webp"
-                      alt="Your Company"
+                      alt="WalletHedge"
+                      width={240}
+                      height={32}
+                      unoptimized
                     />
                   </Link>
                     

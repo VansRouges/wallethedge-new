@@ -1,4 +1,5 @@
 // import { CloudArrowUpIcon, LockClosedIcon, ServerIcon } from '@heroicons/react/20/solid'
+import Image from 'next/image'
 
 // const features = [
 //   {
@@ -54,9 +55,13 @@ export default function Example() {
 
           <div className="lg:ml-auto bg-white lg:pr-2 lg:pt-4 lg:w-[65%] rounded-xl border shadow-xl p-5">
             {/* <div className="lg:max-w-lg bg-black"> */}
-              <img 
+              <Image 
                 className="w-72 h-48 m-auto relative bottom-[96px]" 
                 src="/images/why-icon.png"
+                alt="WalletHedge values icon"
+                width={288}
+                height={192}
+                unoptimized
               />
               <p className="-mt-24 text-base leading-8 text-gray-600">
                 Most importantly, the glue that holds all of this together is our culture.
